@@ -1,0 +1,84 @@
+package com.javarush.task.task15.task1527;
+
+import javafx.scene.input.InputMethodTextRun;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+/* 
+Парсер реквестов
+*/
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        //add your code here
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String s = reader.readLine();
+        ArrayList<Double> dList = new ArrayList<Double>();
+        ArrayList<String> strList = new ArrayList<String>();
+        int q = s.indexOf('?');
+        String newStr = s.substring(q+1);
+        String result = "";
+        for(int i = q+1;i<s.length();i++){
+            String check = s.substring(i,i+1);
+            if(!(check.equals("="))&&!(check.equals("&"))){
+                result += check;
+            } else if(result.equals("obj")){
+                System.out.print(result + " ");
+                String result2 = "";
+                String check2= "";
+                for(int k = i+1;!(check2.equals("&"));k++){
+                    check2 = s.substring(k,k+1);
+                    if(!(check2.equals("&"))){
+                        result2 += check2;
+                    } else {
+                        try{
+                            double d = Double.parseDouble(result2);
+                            dList.add(d);
+                        } catch (Exception e){
+                            strList.add(result2);
+                        }
+                    }
+                    i=k;
+                }
+                result="";
+            } else {
+                System.out.print(result + " ");
+                String check3 = "";
+                try {
+                    for (int j = i; !(check3.equals("&")); ) {
+                        check3 = s.substring(j, j + 1);
+                        if (!(check3.equals("&"))) {
+                            j++;
+                        } else {
+                            i = j;
+                        }
+                    }
+                    result = "";
+                } catch (Exception e){
+
+                }
+            }
+        }
+        System.out.println("");
+        try {
+            for (Double dbl : dList) {
+                alert(dbl);
+            }
+            for (String str : strList) {
+                alert(str);
+            }
+        } catch(Exception e){
+
+        }
+    }
+    public static void alert (double value){
+        System.out.println("double: " + value);
+    }
+
+    public static void alert (String value){
+        System.out.println("String: " + value);
+    }
+}
